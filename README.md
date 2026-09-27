@@ -1,3 +1,14 @@
+# Babel USB Pico
+
+This fork adds a Raspberry Pi Pico (RP2040) port of USB of Babel. The Pico
+firmware and build instructions are in [rp2040/](rp2040/). A compiled UF2 is
+available at [rp2040/firmware/babel_usb.uf2](rp2040/firmware/babel_usb.uf2):
+hold BOOTSEL while plugging in the Pico, then copy the UF2 to its `RPI-RP2`
+drive. The original ESP32-S3 project remains at the repository root below.
+
+The Pico firmware has been cross-compiled and its path arithmetic tested on a
+host computer. It has not yet been tested on physical Pico hardware.
+
 ## About
 
 This project turns an ESP32-S3 development board into an infinite filesystem inspired by the [digital Library of Babel](https://libraryofbabel.info/).
