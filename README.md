@@ -1,34 +1,57 @@
 # Babel USB Pico
 
-This fork adds a Raspberry Pi Pico (RP2040) port of USB of Babel. The Pico
-firmware and build instructions are in [rp2040/](rp2040/). A compiled UF2 is
-available at [rp2040/firmware/babel_usb.uf2](rp2040/firmware/babel_usb.uf2):
-hold BOOTSEL while plugging in the Pico, then copy the UF2 to its `RPI-RP2`
-drive. The original ESP32-S3 project remains at the repository root below.
+Turn a Raspberry Pi Pico into a read-only, seemingly endless [Library of
+Babel](https://libraryofbabel.info/) over USB. Every directory contains 4,900
+more directories and a file named `file`; the path determines that file's
+bytes. This is the RP2040 port of [p2r3's USB of Babel](https://github.com/p2r3/babel-usb).
 
-The Pico firmware has been cross-compiled and its path arithmetic tested on a
-host computer. It has not yet been tested on physical Pico hardware.
+**[Get the Pico UF2](https://github.com/palermostest25/Babel-USB-Pico/releases/tag/v0.1.0)** · **[Pico source and full instructions](rp2040/)**
 
-## About
+## Flash a Pi Pico
 
-This project turns an ESP32-S3 development board into an infinite filesystem inspired by the [digital Library of Babel](https://libraryofbabel.info/).
+1. Download `Babel-USB-Pico.uf2` from the [v0.1.0 release](https://github.com/palermostest25/Babel-USB-Pico/releases/tag/v0.1.0).
+2. Hold **BOOTSEL** while connecting the Pico to your computer.
+3. Copy the UF2 to the `RPI-RP2` drive. After it reboots, unplug and reconnect the Pico.
 
-## Usage
+Open **USB of Babel** with an MTP-capable file browser. It appears as a portable
+device, not a normal USB disk. macOS needs an MTP client because Finder does not
+mount generic MTP devices.
 
-1. Buy an ESP32-S3 development board - ideally one shaped as a USB stick for maximum bewilderment. [This is the one I got](https://a.aliexpress.com/_EvdHrrY), though you don't necessarily need this exact variant. **That said, make sure you're getting an ESP32-S3.** That's the only one I've tested. Others may not have hardware USB support. S2 might work, but I make no promises.
-2. Get Visual Studio Code and set up PlatformIO. Refer to Google or YouTube if you don't know how.
-3. Clone this repository **with submodules**. Again, if you don't know what that means, look it up.
-4. Open the cloned folder in VScode, wait for it to set up the project.
-5. While holding the "BOOT" button, plug the microcontroller into your PC.
-6. Click the "→" icon in VScode to compile and flash the project. Once that's done, disconnect and reconnect the microcontroller.
-7. Explore! You might have to copy files off of the MTP share before reading them, as most programs don't support reading directly from MTP.
+The firmware is built for the original Raspberry Pi Pico (`PICO_BOARD=pico`).
+No extra wiring or storage is needed. It has been cross-compiled and its
+byte/path arithmetic has passed host tests; physical Pico testing is still
+pending.
 
-## Finding specific files
+## Find your file in the Babel tree
 
-1. Install [Bun](https://bun.sh/).
-2. Navigate to the cloned folder and use the command `bun run file-to-path.js <path>`, where `<path>` is a path to the file you wish to find. Note that files larger than a couple hundred bytes will take a very long time to generate.
-3. Copy the path it returns and paste it into your file browser after `disk/`.
-4. Find the `file`, copy it off of the drive, and verify that it is in fact the same file.
+From the repository root, run:
 
-## Credits
-The hardware-facing bits of this project are loosely cobbled on top of RigoLigoRLC's work on [esp32s3-tusb-mtp](https://github.com/RigoLigoRLC/esp32s3-tusb-mtp) and their [fork of espressif-tinyusb-component](https://github.com/RigoLigoRLC/espressif-tinyusb-component/tree/release/v0.18-with-mtp).
+```sh
+python3 rp2040/tools/file_to_path.py my-file.bin
+```
+
+The tool prints a path beginning with `disk/` and ending in `/file`. Follow
+that path on the Pico and copy `file` back to your computer. The firmware
+supports files up to 4 KiB, though paths for large files are too deep for most
+file browsers to navigate comfortably. The Pico filesystem is read-only and
+never writes its flash.
+
+## Build from source
+
+```sh
+cd rp2040
+./build.sh
+```
+
+The build downloads pinned Pico SDK and TinyUSB dependencies and produces
+`rp2040/build/babel_usb.uf2`. See the [Pico guide](rp2040/README.md) for
+toolchain requirements, tests, and technical notes.
+
+## Original ESP32-S3 project
+
+The original ESP32-S3 firmware remains at the repository root. Its setup and
+usage instructions are preserved in the [ESP32-S3 guide](docs/esp32-s3.md).
+Credit for the original concept and implementation belongs to
+[p2r3](https://github.com/p2r3/babel-usb); the Pico port uses
+[TinyUSB](https://github.com/hathach/tinyusb) and the
+[Pico SDK](https://github.com/raspberrypi/pico-sdk).

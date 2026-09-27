@@ -1,4 +1,6 @@
-# USB of Babel for Raspberry Pi Pico (RP2040)
+# Babel USB Pico — RP2040 firmware
+
+**[Download the ready-to-flash UF2](https://github.com/palermostest25/Babel-USB-Pico/releases/download/v0.1.0/Babel-USB-Pico.uf2)** · **[Back to the project overview](../README.md)**
 
 This firmware turns a Raspberry Pi Pico into a read-only MTP device containing
 an effectively endless directory tree. Every directory contains 4,900 more
@@ -44,8 +46,8 @@ contain its MTP device class.
 
 ## Flash
 
-This fork includes a compiled UF2 at `firmware/babel_usb.uf2`; you can use it
-without building the source. A local build produces `build/babel_usb.uf2`.
+Download the UF2 from the release linked above, or use the copy at
+`firmware/babel_usb.uf2`. A local build produces `build/babel_usb.uf2`.
 
 1. Unplug the Pico.
 2. Hold **BOOTSEL** while plugging it in.
