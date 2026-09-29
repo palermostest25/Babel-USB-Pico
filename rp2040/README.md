@@ -1,6 +1,6 @@
 # Babel USB Pico — RP2040 firmware
 
-**[Download the ready-to-flash UF2](https://github.com/palermostest25/Babel-USB-Pico/releases/download/v0.1.0/Babel-USB-Pico.uf2)** · **[Back to the project overview](../README.md)**
+**[Download the ready-to-flash UF2](https://github.com/palermostest25/Babel-USB-Pico/releases/download/v0.1.1/Babel-USB-Pico.uf2)** · **[Back to the project overview](../README.md)**
 
 This firmware turns a Raspberry Pi Pico into a read-only MTP device containing
 an effectively endless directory tree. Every directory contains 4,900 more

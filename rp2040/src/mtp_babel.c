@@ -9,7 +9,7 @@
 
 #define DEVICE_MANUFACTURER "p2r3 / RP2040 port"
 #define DEVICE_MODEL "USB of Babel"
-#define DEVICE_VERSION "1.0-rp2040"
+#define DEVICE_VERSION "1.0.1-rp2040"
 #define DEVICE_FRIENDLY_NAME "USB of Babel"
 #define FIXED_DATETIME "20260608T000000.0"
 
@@ -52,6 +52,7 @@ static int32_t get_storage_info(tud_mtp_cb_data_t *cb);
 static int32_t get_device_property(tud_mtp_cb_data_t *cb);
 static int32_t get_object_handles(tud_mtp_cb_data_t *cb);
 static int32_t get_object_info(tud_mtp_cb_data_t *cb);
+static int32_t get_object_prop_value(tud_mtp_cb_data_t *cb);
 static int32_t get_object(tud_mtp_cb_data_t *cb);
 static int32_t get_partial_object(tud_mtp_cb_data_t *cb);
 
@@ -66,6 +67,7 @@ static const operation_t operations[] = {
   {MTP_OP_GET_DEVICE_PROP_VALUE, get_device_property},
   {MTP_OP_GET_OBJECT_HANDLES, get_object_handles},
   {MTP_OP_GET_OBJECT_INFO, get_object_info},
+  {MTP_OP_GET_OBJECT_PROP_VALUE, get_object_prop_value},
   {MTP_OP_GET_OBJECT, get_object},
   {MTP_OP_GET_PARTIAL_OBJECT, get_partial_object},
 };
@@ -285,6 +287,24 @@ static int32_t get_object_info(tud_mtp_cb_data_t *cb) {
   (void)mtp_container_add_cstring(io, FIXED_DATETIME);
   (void)mtp_container_add_cstring(io, "");
   return send_or_busy(io);
+}
+
+static int32_t get_object_prop_value(tud_mtp_cb_data_t *cb) {
+  uint32_t handle = cb->command_container->params[0];
+  uint16_t property = (uint16_t)cb->command_container->params[1];
+  if (!object_matches_path(handle)) return MTP_RESP_INVALID_OBJECT_HANDLE;
+  if (property != MTP_OBJ_PROP_OBJECT_FILE_NAME) {
+    return MTP_RESP_OBJECT_PROP_NOT_SUPPORTED;
+  }
+
+  uint16_t directory_name[BABEL_NAME_LENGTH + 1u];
+  uint16_t *name = file_name;
+  if (!babel_handle_is_file(handle)) {
+    babel_directory_name(babel_local_handle(handle), directory_name);
+    name = directory_name;
+  }
+  (void)mtp_container_add_string(&cb->io_container, name);
+  return send_or_busy(&cb->io_container);
 }
 
 static int32_t send_file_range(tud_mtp_cb_data_t *cb, uint32_t requested_offset,

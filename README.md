@@ -5,11 +5,11 @@ Babel](https://libraryofbabel.info/) over USB. Every directory contains 4,900
 more directories and a file named `file`; the path determines that file's
 bytes. This is the RP2040 port of [p2r3's USB of Babel](https://github.com/p2r3/babel-usb).
 
-**[Get the Pico UF2](https://github.com/palermostest25/Babel-USB-Pico/releases/tag/v0.1.0)** · **[Pico source and full instructions](rp2040/)**
+**[Get the Pico UF2](https://github.com/palermostest25/Babel-USB-Pico/releases/tag/v0.1.1)** · **[Pico source and full instructions](rp2040/)**
 
 ## Flash a Pi Pico
 
-1. Download `Babel-USB-Pico.uf2` from the [v0.1.0 release](https://github.com/palermostest25/Babel-USB-Pico/releases/tag/v0.1.0).
+1. Download `Babel-USB-Pico.uf2` from the [v0.1.1 release](https://github.com/palermostest25/Babel-USB-Pico/releases/tag/v0.1.1).
 2. Hold **BOOTSEL** while connecting the Pico to your computer.
 3. Copy the UF2 to the `RPI-RP2` drive. After it reboots, unplug and reconnect the Pico.
 
@@ -18,9 +18,10 @@ device, not a normal USB disk. macOS needs an MTP client because Finder does not
 mount generic MTP devices.
 
 The firmware is built for the original Raspberry Pi Pico (`PICO_BOARD=pico`).
-No extra wiring or storage is needed. It has been cross-compiled and its
-byte/path arithmetic has passed host tests; physical Pico testing is still
-pending.
+No extra wiring or storage is needed. USB enumeration and root listing have
+been observed on a physical Pico with OpenMTP. The v0.1.1 firmware adds the
+object-filename property request needed to open folders in OpenMTP; that fix
+awaits physical retesting.
 
 ## Find your file in the Babel tree
 
